@@ -53,7 +53,7 @@ classdef BB_v3_Gemini < matlab.apps.AppBase
         currentTrialIndex        % 当前正在标注的 Trial 序号 (行号)
 
         defaultSlots = 37;       % Brinkman board 的默认槽数
-        resultsDataFilename = 'BB_Rating.mat'; % 保存标注结果的文件名
+        % resultsDataFilename = 'BB_Rating.mat'; % 保存标注结果的文件名
         isSliderBeingUpdatedByTimer = false; % 添加一个标志位防止timer更新slider时触发回调
         handCheckbox
         currentRotationAngle = 0; % Current rotation angle in degrees (0, 90, 180, 270)
@@ -1069,7 +1069,15 @@ classdef BB_v3_Gemini < matlab.apps.AppBase
 
             app.currentFolderPath = selectedPath;
             setPersistentFolderPath(app, selectedPath);
-            app.resultsFilePath = fullfile(app.currentFolderPath, app.resultsDataFilename);
+            % app.resultsFilePath = fullfile(app.currentFolderPath, app.resultsDataFilename);
+
+            % --- 动态生成结果文件名 ---
+            [~, folderName, ~] = fileparts(app.currentFolderPath);
+            % dateStr = datestr(now, 'yyyymmdd');
+            % dynamicFilename = sprintf('%s_%s.mat', folderName, dateStr);
+            % app.resultsFilePath = fullfile(app.currentFolderPath, dynamicFilename);
+            % fprintf('Debug: Results file path set to: %s\n', app.resultsFilePath); % 用于调试
+            dynamicFilename = sprintf('%s.mat', folderName);
 
             stopTimers(app);
 
@@ -1751,7 +1759,7 @@ classdef BB_v3_Gemini < matlab.apps.AppBase
             app.SlotsUnitLabel.FontSize = 14; app.SlotsUnitLabel.Text = '个槽';
 
             app.HandRestraintPlane = uipanel(settingsGrid);
-            app.HandRestraintPlane.Title = '手部束缚'; app.HandRestraintPlane.FontSize = 15;
+            app.HandRestraintPlane.Title = '哪只手可以使用'; app.HandRestraintPlane.FontSize = 15;
             app.HandRestraintPlane.Layout.Row = 1; app.HandRestraintPlane.Layout.Column = 5;
             app.handlist = uigridlayout(app.HandRestraintPlane);
             % app.handlist.ColumnWidth = {'1x'};
@@ -1761,7 +1769,7 @@ classdef BB_v3_Gemini < matlab.apps.AppBase
 
             app.NoRestraintButton = uicheckbox(app.handlist);
             app.NoRestraintButton.ValueChangedFcn = createCallbackFcn(app, @radioGroupValueChanged, true);
-            app.NoRestraintButton.Text = '无';
+            app.NoRestraintButton.Text = '双手';
             app.NoRestraintButton.FontSize = 17;
             app.NoRestraintButton.Layout.Row = 1;
             app.NoRestraintButton.Layout.Column = 1;
