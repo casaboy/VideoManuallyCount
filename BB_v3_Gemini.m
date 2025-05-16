@@ -1078,6 +1078,7 @@ classdef BB_v3_Gemini < matlab.apps.AppBase
             % app.resultsFilePath = fullfile(app.currentFolderPath, dynamicFilename);
             % fprintf('Debug: Results file path set to: %s\n', app.resultsFilePath); % 用于调试
             dynamicFilename = sprintf('%s.mat', folderName);
+            app.resultsFilePath = fullfile(app.currentFolderPath, dynamicFilename);
 
             stopTimers(app);
 
